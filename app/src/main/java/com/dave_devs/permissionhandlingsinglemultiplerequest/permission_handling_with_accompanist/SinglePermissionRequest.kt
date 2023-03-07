@@ -17,9 +17,15 @@ import com.google.accompanist.permissions.shouldShowRationale
 @Composable
 fun SinglePermissionRequest() {
     val permissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+    //The CompositionLocal containing the current LifecycleOwner (A class that has an Android lifecycle).
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    /*A side effect of composition that must run
+    for any new unique value of key1 and must be
+    reversed or cleaned up if key1 changes or if
+    the DisposableEffect leaves the composition.*/
     DisposableEffect(key1 = lifecycleOwner, effect = {
+        //LifecycleEventObserver is a class that can receive any lifecycle change and dispatch it to the receiver.
         val observer = LifecycleEventObserver { _, event ->
             when(event) {
                 Lifecycle.Event.ON_START -> {
@@ -28,8 +34,9 @@ fun SinglePermissionRequest() {
                 else -> return@LifecycleEventObserver
             }
         }
+        //Call to add an observer(effect) to the DisposableEffect block after the key change.
         lifecycleOwner.lifecycle.addObserver(observer)
-
+        //Call to remove a key from DisposableEffect block.
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }

@@ -77,9 +77,7 @@ class MainActivity : ComponentActivity() {
                     }) { Text(text = "Grant multiple permission") }
                 }
 
-                dialogQueue
-                    .reversed()
-                    .forEach{ permission ->
+                dialogQueue.reversed().forEach{ permission ->
                     PermissionDialog(
                         PermissionTextProvider = when (permission) {
                              Manifest.permission.CAMERA -> {
